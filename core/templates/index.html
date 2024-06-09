@@ -9,19 +9,22 @@
     <h1>create Author</h1>
     <form action="/create-author" method="POST">
         {%csrf_token%}
-        <input type="text" name="name">
-        <button type="submit">create book</button>
+        {%for field in author_form%}
+            {{field.label_tag}}
+            {{field}}
+            {{field.errors}}
+        {%endfor%}
+        <button type="submit">Author Book</button>
     </form>
     <h1>create Book</h1>
     <form action="/create-book" method="POST">
         {%csrf_token%}
-        <input type="text" name="name">
-        <select name="author-name" >
-            {%for author in authors%}
-            <option value="{{author.name}}">{{author.name}}</option>
-            {%endfor%}
-        </select>
-        <button type="submit">create book</button>
+        {%for field in book_form%}
+            {{field.label_tag}}
+            {{field}}
+            {{field.errors}}
+        {%endfor%}
+        <button type="submit">Create Book</button>
     </form>
     {% for book in books%}
     <hr>
@@ -30,7 +33,11 @@
     <h3>update data</h3>
     <form action="/update-book/{{book.id}}" method="POST">
         {%csrf_token%}
-        <input type="text" name="name">
+        {%for field in book_form%}
+            {{field.label_tag}}
+            {{field}}
+            {{field.errors}}
+        {%endfor%}
         <button type="submit">Update Data</button>
     </form>
     <a href="/delete-book/{{book.id}}">delete</a>

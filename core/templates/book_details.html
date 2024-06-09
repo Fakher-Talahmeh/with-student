@@ -10,7 +10,11 @@
     <h2>{{book.author}}</h2>
     <form action="/update-book/{{book.id}}" method="POST">
         {%csrf_token%}
-        <input type="text" name="name">
+        {%for field in book_form%}
+            {{field.label_tag}}
+            {{field}}
+            {{field.errors}}
+        {%endfor%}
         <button type="submit">Update Data</button>
     </form>
     <a href="/delete-book/{{book.id}}">delete</a>

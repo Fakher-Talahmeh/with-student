@@ -1,33 +1,38 @@
 from django.shortcuts import render,redirect
 from .models import *
+from .forms import BookForm,AuthorForm
 # Create your views here.
 def index(request):
     books =book.objects.all()
     authors = Author.objects.all()
-    return render(request,'index.html',context={'books':books,'authors':authors})
+    book_form = BookForm()
+    author_form = AuthorForm()
+    return render(
+        request,
+        'index.html',
+        context={'books':books,
+                 'authors':authors,
+                 'book_form':book_form,
+                 'author_form':author_form
+                 })
 
 def append_book(request):
-    author =Author.objects.get(
-            name=request.POST.get('author-name')
-        )
-    new_book = book.objects.create(
-        name=request.POST.get('name'),
-        author=author
-    )
-    new_book.save()
+    form = BookForm(request.POST)
+    if form.is_valid():
+        form.save()
     return redirect('home')
 
 def append_author(request):
-    new_author = Author.objects.create(
-        name=request.POST.get('name')
-    )
-    new_author.save()
+    form = AuthorForm(request.POST)
+    if form.is_valid():
+        form.save()
     return redirect('home')
 
 def update_book(request,pk):
     update_book = book.objects.get(id=pk)
-    update_book.name = request.POST.get('name')
-    update_book.save()
+    form = BookForm(request.POST,instance=update_book)
+    if form.is_valid():
+        form.save()
     return redirect('home')
 
 def delete_book(request,pk):
@@ -36,4 +41,5 @@ def delete_book(request,pk):
 
 def details_book(request,pk):
     view_book = book.objects.get(id=pk)
-    return render(request,'book_details.html',{'book':view_book})
+    book_form = BookForm()
+    return render(request,'book_details.html',{'book':view_book,'book_form':book_form})
