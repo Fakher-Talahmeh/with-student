@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>create Author</h1>
+    <form action="/create-author" method="POST">
+        {%csrf_token%}
+        <input type="text" name="name">
+        <button type="submit">create book</button>
+    </form>
+    <h1>create Book</h1>
+    <form action="/create-book" method="POST">
+        {%csrf_token%}
+        <input type="text" name="name">
+        <select name="author-name" >
+            {%for author in authors%}
+            <option value="{{author.name}}">{{author.name}}</option>
+            {%endfor%}
+        </select>
+        <button type="submit">create book</button>
+    </form>
+    {% for book in books%}
+    <hr>
+    <h2>Book name:{{book.name}}</h2>
+    <h2>Author Name : {{book.author.name}}</h2>
+    <h3>update data</h3>
+    <form action="/update-book/{{book.id}}" method="POST">
+        {%csrf_token%}
+        <input type="text" name="name">
+        <button type="submit">Update Data</button>
+    </form>
+    <a href="/delete-book/{{book.id}}">delete</a>
+    <a href="/book/{{book.id}}">View Details</a>
+    {%endfor%}
+</body>
+</html>
